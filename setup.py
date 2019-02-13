@@ -6,7 +6,8 @@ import setuptools
 
 REQUIRED = [
     "numpy",
-    "pandas"
+    "pandas",
+    "sklearn"
 ]
 
 with open("README.md", "r") as fh:
@@ -14,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="lambdata-carlosgutier",
-    version="0.0.5",
+    version="0.0.6",
     author="carlos-gutier",
     description="A collection of Data Science helper functions",
     long_description=LONG_DESCRIPTION,
