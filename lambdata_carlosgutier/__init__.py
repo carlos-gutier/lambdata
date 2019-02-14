@@ -3,9 +3,10 @@
 Python module for splitting data into train, validation, and train datasets.
 """
 
-from sklearn.model_selection import train_test_split
 
-class DataSplitter(object):
+
+class DataSplitter():
+    
     """
     Python module for splitting data into train, validation, and train datasets.
     It uses scikitlearn's 'train_test_split' to create additional validation
@@ -29,38 +30,46 @@ class DataSplitter(object):
     def __init__(
         self, X, y, train_size=0.8, val_size=0.1, test_size=0.1,
         random_state=None, shuffle=True):
-        self.X = X,
-        self.y = y,
-        self.train_size = train_size,
-        self.val_size = val_size,
-        self.test_size = test_size,
-        self.random_state = random_state,
-        self.shuffle = suffle
-
+        '''
+        X (Pandas DataFrame)
+        y (Pandas Series or numpy array)
+        '''
+        self.X = X
+        self.y = y
+        self.train_size = train_size
+        self.val_size = val_size
+        self.test_size = test_size
+        self.random_state = random_state
+        self.shuffle = shuffle
 
     def train_test_splitter(self):
 
+        from sklearn.model_selection import train_test_split
+
         # Ensure set sizes add up to 1
-        assert (train_size + val_size + test_size == 1)
+        assert (self.train_size + self.val_size + self.test_size == 1)
 
         # Divide data into 'test' and leftovers
         X_leftovers, X_test, y_leftovers, y_test = train_test_split(
-        X, y, test_size=test_size,
-        random_state=random_state, shuffle=shuffle)
+        self.X, self.y, test_size=self.test_size,
+        random_state=self.random_state, shuffle=self.shuffle)
 
-    def train_val_test_splitter(self, X_leftovers, y_leftovers):
+        return X_leftovers, X_test, y_leftovers, y_test
+
+    def train_val_test_splitter(self):
+
+        from sklearn.model_selection import train_test_split
+
+        assert (self.train_size + self.val_size + self.test_size == 1)
+
+        # Divide data into 'test' and leftovers
+        X_leftovers, X_test, y_leftovers, y_test = train_test_split(
+        self.X, self.y, test_size=self.test_size,
+        random_state=self.random_state, shuffle=self.shuffle)
 
         # Divide leftovers into 'train' and 'validate'
         X_train, X_validate, y_train, y_validate = train_test_split(
-        X_leftovers, y_leftovers, train_size=(train_size / (train_size + val_size)),
-        random_state=random_state, shuffle=shuffle)
+        X_leftovers, y_leftovers, train_size=(self.train_size / (self.train_size + self.val_size)),
+        random_state=self.random_state, shuffle=self.shuffle)
 
-        # Print out the shapes of the datasets, to confirm that they're
-        # what we expect
-        print(f'X_train   : {X_train.shape}')
-        print(f'X_validate: {X_validate.shape}')
-        print(f'X_test    : {X_test.shape}')
-        print()
-        print(f'y_train   : {y_train.shape}')
-        print(f'y_validate: {y_validate.shape}')
-        print(f'y_test    : {y_test.shape}')
+        return X_train, X_validate, X_test, y_train, y_validate, y_test
