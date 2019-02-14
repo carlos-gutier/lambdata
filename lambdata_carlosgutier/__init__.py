@@ -2,7 +2,7 @@
 """
 Python module for splitting data into train, validation, and train datasets.
 """
-
+from sklearn.model_selection import train_test_split
 
 
 class DataSplitter():
@@ -44,8 +44,6 @@ class DataSplitter():
 
     def train_test_splitter(self):
 
-        from sklearn.model_selection import train_test_split
-
         # Ensure set sizes add up to 1
         assert (self.train_size + self.val_size + self.test_size == 1)
 
@@ -57,8 +55,6 @@ class DataSplitter():
         return X_leftovers, X_test, y_leftovers, y_test
 
     def train_val_test_splitter(self):
-
-        from sklearn.model_selection import train_test_split
 
         assert (self.train_size + self.val_size + self.test_size == 1)
 
