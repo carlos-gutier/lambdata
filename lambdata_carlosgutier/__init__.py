@@ -5,10 +5,10 @@ Python module for splitting data into train, validation, and train datasets.
 from sklearn.model_selection import train_test_split
 
 
-class DataSplitter():
-    
+class DataSplitter:
     """
-    Python module for splitting data into train, validation, and train datasets.
+    Python module for splitting data into train, validation,
+    and train datasets.
     It uses scikitlearn's 'train_test_split' to create additional validation
     dataset for additional data testingself.
 
@@ -29,7 +29,7 @@ class DataSplitter():
 
     def __init__(
         self, X, y, train_size=0.8, val_size=0.1, test_size=0.1,
-        random_state=None, shuffle=True):
+            random_state=None, shuffle=True):
         '''
         X (Pandas DataFrame)
         y (Pandas Series or numpy array)
@@ -49,8 +49,8 @@ class DataSplitter():
 
         # Divide data into 'test' and leftovers
         X_leftovers, X_test, y_leftovers, y_test = train_test_split(
-        self.X, self.y, test_size=self.test_size,
-        random_state=self.random_state, shuffle=self.shuffle)
+            self.X, self.y, test_size=self.test_size,
+            random_state=self.random_state, shuffle=self.shuffle)
 
         return X_leftovers, X_test, y_leftovers, y_test
 
@@ -60,12 +60,23 @@ class DataSplitter():
 
         # Divide data into 'test' and leftovers
         X_leftovers, X_test, y_leftovers, y_test = train_test_split(
-        self.X, self.y, test_size=self.test_size,
-        random_state=self.random_state, shuffle=self.shuffle)
+            self.X, self.y, test_size=self.test_size,
+            random_state=self.random_state, shuffle=self.shuffle)
 
         # Divide leftovers into 'train' and 'validate'
         X_train, X_validate, y_train, y_validate = train_test_split(
-        X_leftovers, y_leftovers, train_size=(self.train_size / (self.train_size + self.val_size)),
-        random_state=self.random_state, shuffle=self.shuffle)
+            X_leftovers, y_leftovers, train_size=(self.train_size /
+            (self.train_size + self.val_size)),
+            random_state=self.random_state, shuffle=self.shuffle)
 
         return X_train, X_validate, X_test, y_train, y_validate, y_test
+
+    def cut_outliers(self, df):
+        """
+        df (Pandas Dataframe)
+        """
+        from scipy import stats
+        print(df.shape)
+        df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]
+        print(df.shape)
+        return df
